@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+
+    <style>
+
+        .destacado {
+            border: solid 1px #ff0080;
+            margin: 2px 4px;
+            padding: 2px 6px;
+        }
+
+        .codigo {
+            background: #ccc;
+            margin: 1px 2px;
+            padding: 1px 4px;
+            font-family: monospace;
+        }
+
+        .fundo-cinza {
+            background-color: grey
+        }
+
+    </style>
+
+
+    <script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        /*
+
+        Tópicos
+
+        1. DOM
+        2. Selecionando Elementos do DOM
+        3. Manipulando Elementos
+        4. Estilizando Elementos
+        5. Armazenando Dados em Atributos
+
+
+        */
+
+
+
+        
+        /*###############################################################*/
+        /*############################## DOM ############################*/
+        /*###############################################################*/
+        
+
+        // Função simples que imprime o DOM
+        function imprimirDOM(nodo, prefixo) {
+            
+            console.log(prefixo + nodo.nodeName);
+
+            for (let i = 0; i < nodo.childNodes.length; i++)
+            {
+                imprimirDOM(nodo.childNodes[i], prefixo + '\t');
+            }
+        }
+        // imprimirDOM(document, '');
+
+
+        /*###############################################################*/
+        /*############ SELECIONANDO ELEMENTOS DO DOM ####################*/
+        /*###############################################################*/
+
+        /*
+        document.getElementById('id-qualquer');
+
+        document.getElementByClassName('classe-qualquer');
+
+        document.getElementsByTagName('tag-qualquer');
+        
+        document.querySelector('tag-qualquer');
+
+        document.querySelector('.classe-qualquer');
+
+        document.querySelector('#id-qualquer');
+
+        document.querySelector('#destacado > p');
+        */
+
+
+
+        /*###############################################################*/
+        /*#################### MANIPULANDO ELEMENTOS ####################*/
+        /*###############################################################*/
+
+        /*
+        const paragrafo1 = document.getElementsByTagName('p')[0];
+
+        let conteudo_texto = paragrafo1.textContent;
+
+        let conteudo_html = paragrafo1.innerHTML;
+        
+        paragrafo1.textContent = "Texto do parágrafo alterado.";
+
+        paragrafo1.innerHTML = "Texto do parágrafo <i>alterado</i>.";
+        */
+
+        /*###############################################################*/
+        /*#################### ESTILIZANDO ELEMENTOS ####################*/
+        /*###############################################################*/
+
+
+        const paragrafo1 = document.createElement('p');
+
+        const paragrafo2 = document.createElement('p');
+
+        paragrafo1.textContent = "Parágrafo criado dinamicamente.";
+
+        paragrafo2.textContent = "Parágrafo também criado dinamicamente";
+
+        const elemento_pai = document.getElementById('conteudo');
+
+        const primeiro_elemento_filho = elemento_pai.childNodes[0];
+
+        elemento_pai.insertBefore(paragrafo1, primeiro_elemento_filho);
+
+        elemento_pai.appendChild(paragrafo2);
+
+        /*###############################################################*/
+        /*#################### ESTILIZANDO ELEMENTOS ####################*/
+        /*###############################################################*/
+
+        // Destaca um parágrafo contendo palavra
+        function destacarParagrafo(palavra) {
+
+            if(typeof palavra === 'string')
+            {
+                palavra = new RegExp(`\\b${palavra}\\b`, 'i');
+            }
+
+            const paragrafos = document.getElementsByTagName('p');
+
+            console.log(paragrafos);
+
+            for (let paragrafo of paragrafos)
+            {
+                if (!palavra.test(paragrafo.textContent))
+                {
+                    continue;
+                }
+                
+                paragrafo.classList.add('fundo-cinza');
+            }
+        }
+        //destacarParagrafo('documento');
+
+
+        // Remove uma classe de todos os parágrafos
+        function removerClasseParagrafos() {
+
+            const paragrafos = document.getElementsByTagName('p');
+
+            for (let paragrafo of paragrafos)
+            {
+                paragrafo.classList.remove('fundo-cinza');
+            }
+        }
+
+
+        /*###############################################################*/
+        /*################ ARMAZENANDO DADOS EM ATRIBUTOS ###############*/
+        /*###############################################################*/
+
+
+        /*
+        const acoesDestacar = document.querySelectorAll('[data-acao="destacar"]');
+
+        console.log(acoesDestacar[0].dataset
+        );
+
+        acoesDestacar[0].dataset.palavra = "girafa";
+        */
+
+
+        /*###############################################################*/
+        /*############################ EVENTOS ##########################*/
+        /*###############################################################*/    
+
+        const acoesDestacar = document.querySelectorAll('[data-acao="destacar"]');
+
+        for (let acao of acoesDestacar) {
+
+            acao.addEventListener('click', evento => {
+
+                evento.preventDefault();
+
+                destacarParagrafo(acao.dataset.palavra);
+            })
+        }
+
+
+        const acoesRemoverDestaque = document.querySelectorAll('[data-acao="remover-destaques"]');
+
+        for (let acao of acoesRemoverDestaque) {
+
+            acao.addEventListener('click', evento => {
+                
+
+                evento.preventDefault();
+
+                removerClasseParagrafos();
+            })
+        }
+
+
+    });
+
+    
+
+    </script>
+</head>
+<body>
+
+    <button data-acao="destacar" data-palavra="documento">Destacar parágrafos contendo a palavra "documento"</button>
+
+    <button data-acao="remover-destaques">Remover destaque.</button>
+    
+    <header>
+        <h1>HTML Simples</h1>
+    </header>
+
+    <div id="conteudo">
+
+        <p>Este é um documento HTML <i>simples</i>.</p>
+
+        <div class="destacado">
+            <p>Parágrafo destacado.</p>
+        </div>
+
+        <p>IDs (como por exemplo <span class="codigo">#conteudo</span>) são únicos (só pode existir um por página).</p>
+
+        <p>Classes (como por exemplo <span class="codigo">.destacado</span>) podem ser usadas em vários elementos.</p>
+
+        <div id="destacado2" class="destacado ">
+            <p>Um elemento HTML pode ter várias classes.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
